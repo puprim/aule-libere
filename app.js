@@ -110,6 +110,7 @@
     .al-room{padding:10px 12px;border-radius:12px;margin:8px 0;background:var(--occ)}
     .al-room.free{background:var(--free);box-shadow:inset 4px 0 0 var(--ac)}
     .al-room .t{display:flex;justify-content:space-between;gap:8px;font-weight:600}
+    .al-room .t>span:last-child{white-space:nowrap;flex-shrink:0;font-size:14px}
     .al-room .s{font-size:12px;color:var(--mu)}
     .al-room small.i{font-weight:400;color:var(--mu)}
     .al-room small.p{font-weight:600;color:var(--on);background:var(--ac);border-radius:6px;padding:1px 6px;white-space:nowrap}
