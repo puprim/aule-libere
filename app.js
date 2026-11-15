@@ -88,33 +88,40 @@
   panel.innerHTML = `
   <style>
     #aule-libere-panel{position:fixed;inset:0;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);max-width:640px;margin:0 auto;
-      background:#fff;color:#1d1d1f;font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
       display:flex;flex-direction:column;overflow:hidden;text-align:left}
-    #al-now{color:#2f7d4f;font-weight:700;font-size:18px!important;width:36px!important;height:36px!important;background:#e9f7ee!important}
+    #al-now{color:var(--ac);font-weight:700;font-size:18px!important;width:36px!important;height:36px!important;background:var(--free)!important}
+    #aule-libere-panel{--bg:#fff4e6;--sf:#fffaf3;--tx:#1d1d1f;--mu:#7a6a5c;--ac:#e8590c;--on:#fff;--bd:#f0c9a3;--line:#f5dcc2;
+      --free:#ffe3c7;--occ:#f6ebdf;--track:#fbd3ad;--busy:#b8551a;color-scheme:light}
+    @media (prefers-color-scheme:dark){#aule-libere-panel{--bg:#17120e;--sf:#231b15;--tx:#f7ede3;--mu:#b8a696;--ac:#ff8f45;--on:#1d1d1f;--bd:#4a3829;--line:#33271d;
+      --free:#3b2513;--occ:#221a14;--track:#57381f;--busy:#ffb37d;color-scheme:dark}}
     #aule-libere-panel *{box-sizing:border-box}
-    #al-head{padding:14px 16px 10px;border-bottom:1px solid #eee}
+    #al-head{padding:14px 16px 10px;border-bottom:1px solid var(--line)}
     #al-head h2{margin:0 0 8px;font-size:17px;display:flex;justify-content:space-between;align-items:center}
-    #al-head button.x{border:0;background:#f2f2f2;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:16px}
+    #al-head button.x{border:0;background:var(--occ);border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:16px}
     #al-ctrl{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    #al-ctrl label{font-size:12px;color:#666;display:flex;flex-direction:column;gap:3px}
-    #al-ctrl select,#al-ctrl input{font:16px/1.3 system-ui,-apple-system,sans-serif;padding:9px 10px;-webkit-appearance:none;appearance:none;min-height:42px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#1d1d1f}
+    #al-ctrl label{font-size:12px;color:var(--mu);display:flex;flex-direction:column;gap:3px}
+    #al-ctrl select,#al-ctrl input{font:16px/1.3 system-ui,-apple-system,sans-serif;padding:9px 10px;-webkit-appearance:none;appearance:none;min-height:42px;border:1px solid var(--bd);border-radius:10px;background:var(--sf);color:var(--tx)}
+    #al-ctrl select:focus,#al-ctrl input:focus{outline:2px solid var(--ac);outline-offset:1px}
     #al-ctrl .full{grid-column:1/-1}
     #al-body{overflow:auto;padding:10px 16px 16px;flex:1}
-    #al-status{font-size:12px;color:#666;margin:6px 0}
-    .al-sec{margin:14px 0 6px;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:#555}
-    .al-room{padding:8px 10px;border-radius:10px;margin:6px 0;background:#f6f7f8}
-    .al-room.free{background:#e9f7ee}
+    #al-status{font-size:12px;color:var(--mu);margin:6px 0}
+    .al-sec{margin:14px 0 6px;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--ac)}
+    .al-room{padding:10px 12px;border-radius:12px;margin:8px 0;background:var(--occ)}
+    .al-room.free{background:var(--free);box-shadow:inset 4px 0 0 var(--ac)}
     .al-room .t{display:flex;justify-content:space-between;gap:8px;font-weight:600}
-    .al-room .s{font-size:12px;color:#555}
-    .al-bar{position:relative;height:8px;background:#d9f0e1;border-radius:4px;margin-top:6px;overflow:hidden}
-    .al-bar i{position:absolute;top:0;bottom:0;background:#e0675a}
-    .al-bar b{position:absolute;top:-2px;bottom:-2px;width:2px;background:#1d1d1f}
-    .al-closed{text-align:center;padding:36px 20px;margin:12px 0;border-radius:14px;background:#f3f4f6}
+    .al-room .s{font-size:12px;color:var(--mu)}
+    .al-room small.i{font-weight:400;color:var(--mu)}
+    .al-room small.p{font-weight:600;color:var(--on);background:var(--ac);border-radius:6px;padding:1px 6px;white-space:nowrap}
+    .al-bar{position:relative;height:8px;background:var(--track);border-radius:4px;margin-top:6px;overflow:hidden}
+    .al-bar i{position:absolute;top:0;bottom:0;background:var(--busy)}
+    .al-bar b{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--tx)}
+    .al-closed{text-align:center;padding:36px 20px;margin:12px 0;border-radius:14px;background:var(--free)}
     .al-closed .ic{font-size:40px;line-height:1}
-    .al-closed h3{margin:10px 0 6px;font-size:22px;color:#1d1d1f}
-    .al-closed p{margin:4px 0;color:#444}
-    .al-closed .n{font-size:13px;color:#888;margin-top:10px}
-    .al-ticks{display:flex;justify-content:space-between;font-size:10px;color:#999;margin-top:2px}
+    .al-closed h3{margin:10px 0 6px;font-size:22px;color:var(--tx)}
+    .al-closed p{margin:4px 0;color:var(--tx)}
+    .al-closed .n{font-size:13px;color:var(--mu);margin-top:10px}
+    .al-ticks{display:flex;justify-content:space-between;font-size:10px;color:var(--mu);margin-top:2px}
   </style>
   <div id="al-head">
     <h2>Aule libere — UdA <button class="x" title="Aggiorna" id="al-now">↻</button></h2>
@@ -242,8 +249,8 @@
     const nomeAula = a => (a.desc || a.codice);
     const sede = a => edId !== COMBO ? '' : /^PE_MIC/.test(a.edCod || '') ? 'Micara' : 'Pindaro';
     const info = a => [sede(a), a.cap ? a.cap + ' posti' : ''].filter(Boolean).join(' · ');
-    const titolo = a => esc(nomeAula(a)) + (info(a) ? ` <small style="font-weight:400;color:#777">· ${info(a)}</small>` : '') +
-      (preferita(a) ? ' <small style="font-weight:600;color:#fff;background:#2f7d4f;border-radius:6px;padding:1px 6px">prese PC</small>' : '');
+    const titolo = a => esc(nomeAula(a)) + (info(a) ? ` <small class="i">· ${info(a)}</small>` : '') +
+      (preferita(a) ? ' <small class="p">prese PC</small>' : '');
     const ord = (x, y) => nomeAula(x.a).localeCompare(nomeAula(y.a), 'it', { numeric: true });
     const pref = x => preferita(x.a) ? 0 : 1;
     libere.sort((x, y) => (pref(x) - pref(y)) || ((y.fino ?? Infinity) - (x.fino ?? Infinity)) || ord(x, y));
