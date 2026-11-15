@@ -109,6 +109,11 @@
     .al-bar{position:relative;height:8px;background:#d9f0e1;border-radius:4px;margin-top:6px;overflow:hidden}
     .al-bar i{position:absolute;top:0;bottom:0;background:#e0675a}
     .al-bar b{position:absolute;top:-2px;bottom:-2px;width:2px;background:#1d1d1f}
+    .al-closed{text-align:center;padding:36px 20px;margin:12px 0;border-radius:14px;background:#f3f4f6}
+    .al-closed .ic{font-size:40px;line-height:1}
+    .al-closed h3{margin:10px 0 6px;font-size:22px;color:#1d1d1f}
+    .al-closed p{margin:4px 0;color:#444}
+    .al-closed .n{font-size:13px;color:#888;margin-top:10px}
     .al-ticks{display:flex;justify-content:space-between;font-size:10px;color:#999;margin-top:2px}
   </style>
   <div id="al-head">
@@ -250,6 +255,25 @@
         <b style="left:${(t - ap) / span * 100}%"></b></div>`;
     };
     const ticks = `<div class="al-ticks"><span>8</span><span>11</span><span>14</span><span>17</span><span>20</span></div>`;
+
+    // Università chiusa: nessuna lezione in questi edifici quel giorno, oppure l'ora scelta è
+    // prima della prima lezione o dopo la fine dell'ultima (quindi nessuna aula è occupata).
+    const impEd = [...new Map([...perAula.values()].filter(x => !ESCLUDI_AULE.test(x.a.desc || ''))
+      .flatMap(x => x.imp).map(i => [i.id, i])).values()];
+    const primo = impEd.length ? Math.min(...impEd.map(i => i.s)) : null;
+    const ultimo = impEd.length ? Math.max(...impEd.map(i => i.e)) : null;
+    const chiusa = !occupate.length && (!impEd.length || t < primo || t >= ultimo);
+    if (chiusa) {
+      const quando = giornoSel.toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+      const motivo = !impEd.length
+        ? `Nessuna lezione in programma ${esc(quando)} in questi edifici.`
+        : t < primo ? `Le lezioni di ${esc(quando)} iniziano alle ${hhmm(new Date(primo))}.`
+        : `Le lezioni di ${esc(quando)} sono finite alle ${hhmm(new Date(ultimo))}.`;
+      $('#al-out').innerHTML = `<div class="al-closed"><div class="ic">🔒</div><h3>Università chiusa</h3><p>${motivo}</p>
+        <p class="n">Prova a cambiare giorno o ora.</p></div>`;
+      status(`Nessuna aula occupata alle ${hhmm(new Date(t))}.`);
+      return;
+    }
 
     $('#al-out').innerHTML =
       `<div class="al-sec">Libere alle ${hhmm(new Date(t))} (${libere.length})</div>` +
